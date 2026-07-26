@@ -745,10 +745,8 @@
 </a>
 
 <script>
-  /* === CONFIGURE AQUI ===
-     Número que recebe os interesses (formato internacional, só dígitos):
-     55 + DDD + número  ->  ex.: "5581999998888" */
-  var WHATSAPP_DESTINO = "5581998073496";
+  /* Endpoint do n8n que recebe o formulário (envia e-mail para contato@ + grava na planilha) */
+  var INTERESSE_ENDPOINT = "https://n8n.plataformaativa.com.br/webhook/interesse-decidir";
 
   /* Scroll reveal (IntersectionObserver, sem scroll listener) */
   (function(){
@@ -766,22 +764,34 @@
     els.forEach(function(el){ io.observe(el); });
   })();
 
-  /* Envio do interesse via WhatsApp (arquivo estático, sem backend) */
+  /* Envio do interesse para o n8n (e-mail + planilha) */
   document.getElementById("interestForm").addEventListener("submit", function(e){
     e.preventDefault();
     var f = e.target;
-    var msg =
-      "*Novo interesse - Metodo DECIDIR*%0A%0A" +
-      "*Nome:* " + encodeURIComponent(f.nome.value) + "%0A" +
-      "*Cargo:* " + encodeURIComponent(f.cargo.value) + "%0A" +
-      "*Instituicao:* " + encodeURIComponent(f.instituicao.value || "-") + "%0A" +
-      "*E-mail:* " + encodeURIComponent(f.email.value) + "%0A" +
-      "*WhatsApp:* " + encodeURIComponent(f.whatsapp.value) + "%0A" +
-      "*Plano:* " + encodeURIComponent(f.plano.value) + "%0A" +
-      "*Desafio:* " + encodeURIComponent(f.desafio.value || "-");
-    document.getElementById("successMsg").style.display = "block";
-    window.open("https://wa.me/" + WHATSAPP_DESTINO + "?text=" + msg, "_blank");
-    f.reset();
+    var btn = f.querySelector('button[type="submit"]');
+    var dados = {
+      nome: f.nome.value,
+      cargo: f.cargo.value,
+      instituicao: f.instituicao.value || "",
+      email: f.email.value,
+      whatsapp: f.whatsapp.value,
+      plano: f.plano.value,
+      desafio: f.desafio.value || ""
+    };
+    if(btn){ btn.disabled = true; btn.style.opacity = ".7"; }
+    fetch(INTERESSE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    }).then(function(r){
+      if(!r.ok) throw new Error("resposta " + r.status);
+      document.getElementById("successMsg").style.display = "block";
+      f.reset();
+    }).catch(function(){
+      alert("Não consegui enviar agora. Tente novamente em instantes ou fale pelo WhatsApp.");
+    }).finally(function(){
+      if(btn){ btn.disabled = false; btn.style.opacity = "1"; }
+    });
   });
 </script>
 
