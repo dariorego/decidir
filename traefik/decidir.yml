@@ -1,0 +1,14 @@
+http:
+  routers:
+    decidir:
+      rule: "Host(`decidir.plataformaativa.com.br`)"
+      entryPoints:
+        - websecure
+      service: decidir
+      tls:
+        certResolver: letsencrypt
+  services:
+    decidir:
+      loadBalancer:
+        servers:
+          - url: "http://decidir:80"

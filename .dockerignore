@@ -1,0 +1,7 @@
+.git
+.gitignore
+Dockerfile
+.dockerignore
+docker-compose.yml
+DEPLOY.md
+traefik/

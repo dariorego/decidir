@@ -1,0 +1,12 @@
+services:
+  decidir:
+    build: .
+    image: decidir:latest
+    container_name: decidir
+    restart: unless-stopped
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
