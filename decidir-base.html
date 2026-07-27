@@ -337,6 +337,11 @@
       <p>Preencha os dados abaixo. Entraremos em contato para confirmar sua vaga na próxima turma.</p>
     </div>
     <form id="interestForm" class="reveal">
+      <div class="field">
+        <label for="codigo">Código do convite</label>
+        <input type="text" id="codigo" name="codigo" placeholder="EVL-123" maxlength="7" autocomplete="off" required pattern="[A-Za-z]{3}-[0-9]{3}" title="Formato EVL-123: 3 letras, hífen e 3 números" style="text-transform:uppercase;letter-spacing:.06em">
+        <span style="display:block;margin-top:6px;font-size:.82rem;color:var(--muted-light)">Turma por convite. Informe o código recebido. Formato: 3 letras, hífen e 3 números. Exemplo: EVL-123.</span>
+      </div>
       <div class="grid2">
         <div class="field">
           <label for="nome">Nome completo</label>
@@ -453,7 +458,14 @@
     e.preventDefault();
     var f = e.target;
     var btn = f.querySelector('button[type="submit"]');
+    var codigo = (f.codigo.value || "").trim().toUpperCase();
+    if(!/^[A-Z]{3}-[0-9]{3}$/.test(codigo)){
+      alert("Código do convite inválido. Use o formato EVL-123: 3 letras, hífen e 3 números.");
+      f.codigo.focus();
+      return;
+    }
     var dados = {
+      codigo: codigo,
       nome: f.nome.value,
       cargo: f.cargo.value,
       instituicao: f.instituicao.value || "",
