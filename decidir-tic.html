@@ -260,9 +260,9 @@
     </div>
     <form id="interestForm" class="reveal">
       <div class="field">
-        <label for="codigo">Código do convite</label>
-        <input type="text" id="codigo" name="codigo" placeholder="TIC-123" maxlength="7" autocomplete="off" required pattern="[A-Za-z]{3}-[0-9]{3}" title="Formato TIC-123: 3 letras, hífen e 3 números" style="text-transform:uppercase;letter-spacing:.06em">
-        <span style="display:block;margin-top:6px;font-size:.82rem;color:var(--muted-light)">Turma por convite. Informe o código recebido. Formato: 3 letras, hífen e 3 números. Exemplo: TIC-123.</span>
+        <label for="codigo">Código do convite <span style="font-weight:400;opacity:.7">(opcional)</span></label>
+        <input type="text" id="codigo" name="codigo" placeholder="TIC-123" maxlength="7" autocomplete="off" pattern="[A-Za-z]{3}-[0-9]{3}" title="Formato TIC-123: 3 letras, hífen e 3 números" style="text-transform:uppercase;letter-spacing:.06em">
+        <span style="display:block;margin-top:6px;font-size:.82rem;color:var(--muted-light)">Se você recebeu um código de convite, informe aqui. Formato: 3 letras, hífen e 3 números. Exemplo: TIC-123. Sem código também dá para demonstrar interesse.</span>
       </div>
       <div class="grid2">
         <div class="field">
@@ -379,8 +379,9 @@
     var f = e.target;
     var btn = f.querySelector('button[type="submit"]');
     var codigo = (f.codigo.value || "").trim().toUpperCase();
-    if(!/^[A-Z]{3}-[0-9]{3}$/.test(codigo)){
-      alert("Código do convite inválido. Use o formato TIC-123: 3 letras, hífen e 3 números.");
+    /* Código é opcional. Só validamos o formato quando a pessoa preencheu algo. */
+    if(codigo && !/^[A-Z]{3}-[0-9]{3}$/.test(codigo)){
+      alert("Código do convite inválido. Use o formato TIC-123: 3 letras, hífen e 3 números. Se não tiver código, deixe o campo em branco.");
       f.codigo.focus();
       return;
     }
