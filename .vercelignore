@@ -1,0 +1,7 @@
+# Arquivos de infraestrutura do deploy antigo (Docker/nginx/Traefik): não publicar
+Dockerfile
+.dockerignore
+docker-compose.yml
+DEPLOY.md
+nginx-decidir.conf
+traefik/
